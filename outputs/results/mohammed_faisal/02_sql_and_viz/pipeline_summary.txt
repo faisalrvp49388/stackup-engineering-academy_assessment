@@ -1,0 +1,57 @@
+PRESIGHT PIPELINE SUMMARY
+============================================================
+Run timestamp     : 2026-09-24T15:31:33
+Pipeline duration : 1.08 s
+
+ROW COUNTS (raw -> clean)
+------------------------------------------------------------
+  projects       raw=    500   clean=    500
+  employees      raw=   1000   clean=   1000
+  transactions   raw=  50000   clean=  50000
+
+EMPLOYEES DETECTION REPORT (rows affected per issue)
+------------------------------------------------------------
+  Missing values                                                10
+  Invalid date formats                                           8
+  Implausible dates                                              0
+  Numeric out-of-range                                           5
+  Logical inconsistencies (salary/experience vs level)           3
+  Status conflicts                                               8
+  Referential issues (manager_id)                                5
+  Duplicates                                                     0
+
+DATA QUALITY FIXES (rows affected)
+------------------------------------------------------------
+  projects: null budget -> 0                                           32
+  projects: null actual_cost -> 0                                      60
+  employees: missing employee_id (unfixable)                            0
+  employees: missing full_name (unfixable)                              0
+  employees: missing department (unfixable)                             0
+  employees: missing role (unfixable)                                   0
+  employees: missing level (unfixable)                                  0
+  employees: missing status (unfixable)                                 0
+  employees: missing email -> derived from name                        10
+  employees: invalid hire_date format -> NULL                           8
+  employees: implausible hire_date -> NULL                              0
+  employees: hire_date recovered from salary history                    0
+  employees: negative years_experience -> level median                  5
+  employees: years_experience outside level band (flagged only)         0
+  employees: salary outside level band -> corrected                     3
+  employees: Active without verifiable hire_date (flagged for review)      8
+  employees: manager_id placeholder (no such employee) -> NULL          5
+  employees: Active staff with Inactive manager (flagged)               0
+  employees: whitespace trimmed                                         0
+  employees: duplicate employee_id dropped                              0
+
+DECISIONS
+------------------------------------------------------------
+  - projects: null budget/actual_cost replaced with 0; derived variance/utilisation stay NULL where an input was unknown, is_over_budget = False when unknown.
+  - employees: bad hire_dates set to NULL then recovered from salary history where possible; salary/experience corrected using level rules; issues flagged in dq_flags column.
+  - transactions: null amount kept NULL in `amount`, 0.0 in `amount_aed`; null approved_by kept NULL and exposed as is_approved=False.
+
+FILES WRITTEN
+------------------------------------------------------------
+  C:\Users\mohammed.faisal\OneDrive - Presight AI\Desktop\stackup-engineering-academy_assessment\outputs\results\mohammed_faisal\02_sql_and_viz\projects_clean.csv
+  C:\Users\mohammed.faisal\OneDrive - Presight AI\Desktop\stackup-engineering-academy_assessment\outputs\results\mohammed_faisal\02_sql_and_viz\employees_clean.csv
+  C:\Users\mohammed.faisal\OneDrive - Presight AI\Desktop\stackup-engineering-academy_assessment\outputs\results\mohammed_faisal\02_sql_and_viz\transactions_clean.csv
+  C:\Users\mohammed.faisal\OneDrive - Presight AI\Desktop\stackup-engineering-academy_assessment\outputs\results\mohammed_faisal\02_sql_and_viz\employees_quality_summary.json

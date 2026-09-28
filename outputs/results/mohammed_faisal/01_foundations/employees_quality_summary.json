@@ -1,0 +1,36 @@
+{
+  "generated_at": "2026-09-24T15:31:29",
+  "rows_before": 1000,
+  "rows_after": 1000,
+  "issues_detected_rows": {
+    "Missing values": 10,
+    "Invalid date formats": 8,
+    "Implausible dates": 0,
+    "Numeric out-of-range": 5,
+    "Logical inconsistencies (salary/experience vs level)": 3,
+    "Status conflicts": 8,
+    "Referential issues (manager_id)": 5,
+    "Duplicates": 0
+  },
+  "rows_affected_per_fix_type": {
+    "missing employee_id (unfixable)": 0,
+    "missing full_name (unfixable)": 0,
+    "missing department (unfixable)": 0,
+    "missing role (unfixable)": 0,
+    "missing level (unfixable)": 0,
+    "missing status (unfixable)": 0,
+    "missing email -> derived from name": 10,
+    "invalid hire_date format -> NULL": 8,
+    "implausible hire_date -> NULL": 0,
+    "hire_date recovered from salary history": 0,
+    "negative years_experience -> level median": 5,
+    "years_experience outside level band (flagged only)": 0,
+    "salary outside level band -> corrected": 3,
+    "Active without verifiable hire_date (flagged for review)": 8,
+    "manager_id placeholder (no such employee) -> NULL": 5,
+    "Active staff with Inactive manager (flagged)": 0,
+    "whitespace trimmed": 0,
+    "duplicate employee_id dropped": 0
+  },
+  "rows_with_at_least_one_flag": 30
+}

@@ -1,0 +1,23 @@
+PRESIGHT ETL PIPELINE REPORT
+============================================================
+DAG run (logical) date : 2026-09-20T02:00:00+00:00
+Generated at           : 2026-09-21T14:12:07.837046+04:00
+
+ROW COUNTS (raw -> clean)
+------------------------------------------------------------
+  projects       raw=500   clean=500
+  employees      raw=1000   clean=1000
+  transactions   raw=50000   clean=50000
+
+DATA QUALITY RESULTS
+------------------------------------------------------------
+  projects       run=8 passed=6 failed=2  (completeness, outliers)
+  employees      run=8 passed=3 failed=5  (validity_numeric, validity_date, consistency, referential_integrity, outliers)
+  transactions   run=9 passed=7 failed=2  (freshness, outliers)
+
+FILES WRITTEN
+------------------------------------------------------------
+  /opt/airflow/outputs/projects_clean.csv
+  /opt/airflow/outputs/employees_clean.csv
+  /opt/airflow/outputs/transactions_clean.csv
+  /opt/airflow/outputs/pipeline_summary.txt

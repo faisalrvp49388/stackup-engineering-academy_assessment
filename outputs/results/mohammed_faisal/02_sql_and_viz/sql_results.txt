@@ -1,0 +1,695 @@
+
+########## data_model.sql ##########
+
+--- [23] -- --------------------------------------------------------------------------- -- SCD2 val
+Empty DataFrame
+Columns: [employee_id, current_count]
+Index: []
+(0 rows)
+
+--- [24] -- Q1b: ...and every employee has at least one current record (must return zero rows) SELE
+Empty DataFrame
+Columns: [employee_id]
+Index: []
+(0 rows)
+
+--- [25] -- Q2: Employees with version history (expect 2-5 versions) SELECT employee_id, COUNT(*) A
+employee_id  version_count
+    EMP0026              5
+    EMP0070              5
+    EMP0115              5
+    EMP0121              5
+    EMP0135              5
+    EMP0141              5
+    EMP0165              5
+    EMP0166              5
+    EMP0234              5
+    EMP0238              5
+(10 rows)
+
+--- [26] -- Q3: Self-join to detect overlapping periods per employee (must return zero rows). -- Tw
+Empty DataFrame
+Columns: [employee_id, key_a, key_b, a_from, a_to, b_from, b_to]
+Index: []
+(0 rows)
+
+--- [27] -- Q3b: Gap detection — a non-current version must end exactly where the next begins (zero
+Empty DataFrame
+Columns: [employee_id, ends, next_starts]
+Index: []
+(0 rows)
+
+--- [28] -- Q3c: Row-count reconciliation of the star schema SELECT (SELECT COUNT(*) FROM dim_proje
+ dim_project  dim_employee_versions  distinct_employees  dim_vendor  bridge_rows  fact_rows
+         500                   2231                1000          25        42595      50000
+(1 rows)
+
+########## queries.sql ##########
+
+--- [1] -- ============================================================= -- Presight — Task 2.1: s
+department  total_budget  total_actual_cost  spend_percentage  over_budget
+     Legal    26490000.0         23959404.0             90.45        False
+(1 rows)
+
+--- [2] -- --------------------------------------------------------------------------- -- Q2. PROJ
+Empty DataFrame
+Columns: [full_name, email, active_project_count, combined_budget_responsibility, combined_actual_spend]
+Index: []
+(0 rows)
+
+--- [3] -- --------------------------------------------------------------------------- -- Q3. VEND
+Empty DataFrame
+Columns: [vendor_name, total_spend, transaction_count, percentage_of_total_spend, risk_flag]
+Index: []
+(0 rows)
+
+--- [4] -- --------------------------------------------------------------------------- -- Q4. PROJ
+project_id                             project_name     department project_status  open_transaction_count  open_transaction_value
+   PRJ0498              Visual Analytics Suite #498   Data Science      Completed                      35               3886933.0
+   PRJ0164      Predictive Maintenance Phase 3 #164          Sales      Completed                      29               3696478.0
+   PRJ0304            Customer Portal Redesign #304          Legal      Completed                      31               3654834.0
+   PRJ0272     Fleet Management System Phase 2 #272   Data Science      Completed                      25               3600482.0
+   PRJ0029          Citizen Services Portal Phase 3 Sustainability      Completed                      28               3530929.0
+   PRJ0344           HR System Upgrade Phase 3 #344          Legal      Completed                      26               3451529.0
+   PRJ0409              Visual Analytics Suite #409             IT      Completed                      28               3426980.0
+   PRJ0385     Supply Chain Automation Phase 2 #385     Operations      Completed                      32               3384042.0
+   PRJ0144       Compliance Monitoring Phase 2 #144        Finance    In Progress                      34               3191114.0
+   PRJ0403           Network Security Overhaul #403 Sustainability    In Progress                      32               3041073.0
+   PRJ0374              Visual Analytics Suite #374 Sustainability    In Progress                      31               3022755.0
+   PRJ0070        Smart Building System Phase 3 #70 Sustainability      Completed                      38               3017147.0
+   PRJ0392    Resource Scheduling Tool Phase 3 #392 Sustainability      Completed                      32               3013727.0
+   PRJ0194    Knowledge Management Portal - Q3 #194             HR      Completed                      25               2971562.0
+   PRJ0023                      Workflow Automation   Data Science    In Progress                      37               2950955.0
+   PRJ0326       Recommendation System Phase 2 #326 Sustainability      Completed                      37               2882009.0
+   PRJ0399  Real-time Analytics Engine Phase 3 #399          Legal    In Progress                      33               2821493.0
+   PRJ0036            Employee Wellness App Phase 3    Engineering      Completed                      22               2814949.0
+   PRJ0169              Master Data Management #169     Operations    In Progress                      25               2813332.0
+   PRJ0208     Disaster Recovery Setup Phase 3 #208    Procurement    In Progress                      31               2797281.0
+   PRJ0494 Data Platform Modernisation Phase 2 #494    Procurement        On Hold                      26               2740537.0
+   PRJ0019          Supply Chain Automation Phase 3    Engineering    In Progress                      30               2735891.0
+   PRJ0063   Real-time Analytics Engine Phase 3 #63 Sustainability      Completed                      37               2734389.0
+   PRJ0233           ERP Consolidation Phase 2 #233          Sales      Completed                      27               2713418.0
+   PRJ0323           HR System Upgrade Phase 3 #323          Legal    In Progress                      28               2712209.0
+(435 rows)
+
+--- [5] -- --------------------------------------------------------------------------- -- Q5. MONT
+year_month       category  monthly_spend  running_total  month_over_month_pct_change
+   2022-01 Cloud Services       793066.0       793066.0                          NaN
+   2022-02 Cloud Services       292487.0      1085553.0                       -63.12
+   2022-03 Cloud Services       573839.0      1659392.0                        96.19
+   2022-04 Cloud Services      1149732.0      2809124.0                       100.36
+   2022-05 Cloud Services      1609095.0      4418219.0                        39.95
+   2022-06 Cloud Services      1209191.0      5627410.0                       -24.85
+   2022-07 Cloud Services      2913119.0      8540529.0                       140.91
+   2022-08 Cloud Services      2653143.0     11193672.0                        -8.92
+   2022-09 Cloud Services      2696559.0     13890231.0                         1.64
+   2022-10 Cloud Services      3921622.0     17811853.0                        45.43
+   2022-11 Cloud Services      2147831.0     19959684.0                       -45.23
+   2022-12 Cloud Services      2299407.0     22259091.0                         7.06
+   2023-01 Cloud Services      3551629.0     25810720.0                        54.46
+   2023-02 Cloud Services      1703266.0     27513986.0                       -52.04
+   2023-03 Cloud Services      2394347.0     29908333.0                        40.57
+   2023-04 Cloud Services      1713620.0     31621953.0                       -28.43
+   2023-05 Cloud Services      2678579.0     34300532.0                        56.31
+   2023-06 Cloud Services      1349113.0     35649645.0                       -49.63
+   2023-07 Cloud Services      3443810.0     39093455.0                       155.26
+   2023-08 Cloud Services      3719079.0     42812534.0                         7.99
+   2023-09 Cloud Services      4019539.0     46832073.0                         8.08
+   2023-10 Cloud Services      4915763.0     51747836.0                        22.30
+   2023-11 Cloud Services      4157384.0     55905220.0                       -15.43
+   2023-12 Cloud Services      4685362.0     60590582.0                        12.70
+   2024-01 Cloud Services      3732130.0     64322712.0                       -20.34
+(726 rows)
+
+--- [6] -- --------------------------------------------------------------------------- -- Q6. LARG
+employee_id         full_name change_date  previous_salary  new_salary  increase_amount  increase_pct
+    EMP0059 Bilal Al Rumaithi  2009-02-13          33852.0     59572.0          25720.0         75.98
+    EMP0211     Mira Al Khaja  2014-05-28          45854.0     69078.0          23224.0         50.65
+    EMP0263         Wei Bhatt  2023-01-19          39557.0     62533.0          22976.0         58.08
+    EMP0599  Sami Al Mansoori  2018-07-27          42233.0     64777.0          22544.0         53.38
+    EMP0179   Khalid Al Naqbi  2009-11-01          40082.0     62270.0          22188.0         55.36
+    EMP0228  Nadia Al Suwaidi  2016-05-06          28836.0     49492.0          20656.0         71.63
+    EMP0936     Ahmed Mahmoud  2023-04-25          28742.0     48448.0          19706.0         68.56
+    EMP0890      Marcus Smith  2022-05-01          29591.0     49121.0          19530.0         66.00
+    EMP0921    Karthik Murthy  2023-04-12          28668.0     48034.0          19366.0         67.55
+    EMP0193     Dana Al Marri  2022-04-01          48120.0     67168.0          19048.0         39.58
+    EMP0046      Pooja Pillai  2021-03-28          27756.0     46751.0          18995.0         68.44
+    EMP0618   Khalid Al Khaja  2018-06-21          34531.0     53484.0          18953.0         54.89
+    EMP0812  Camille Williams  2024-07-24          30363.0     48745.0          18382.0         60.54
+    EMP0603  Yusuf Al Bloushi  2019-06-16          40866.0     59207.0          18341.0         44.88
+    EMP0099      Yusuf Najjar  2019-12-10          27218.0     45046.0          17828.0         65.50
+    EMP0209     Huda Al Zaabi  2011-11-14          30006.0     47703.0          17697.0         58.98
+    EMP0168     Khalid Yousef  2011-02-01          27060.0     44504.0          17444.0         64.46
+    EMP0803      Deepak Kumar  2018-11-22          31173.0     48609.0          17436.0         55.93
+    EMP0688   Mariam Al Naqbi  2025-01-14          24068.0     41428.0          17360.0         72.13
+    EMP0953   Mira Al Bloushi  2024-02-17          32640.0     49976.0          17336.0         53.11
+(20 rows)
+
+########## query_optimization.sql ##########
+
+--- [4] -- ORIGINAL QUERY (do not modify — rewritten in 4b) -- -----------------------------------
+      full_name   department                role                              project_name      status  budget  actual_cost  amount               category payment_status transaction_date
+    Mateo Reddy Data Science        BI Developer        Regulatory Compliance Tool Phase 3 In Progress  200000       172385  795371               Security        Pending       2025-03-20
+  Yusuf Mansour Data Science         ML Engineer   Legacy System Decommission Phase 3 #314 In Progress  800000       676742  770822               Software        Pending       2024-11-01
+    Roshan Iyer Data Science         BI Engineer                Recommendation System - Q1 In Progress 2000000      1660788  721612                Storage        Pending       2022-10-27
+Hassan Al Zaabi Data Science      Data Scientist    Sentiment Analysis Engine Phase 2 #101 In Progress 2000000      2381174  695609             Consulting        Pending       2024-11-15
+Sami Al Bloushi Data Science Senior Data Analyst              Resource Scheduling Tool #62 In Progress  120000        85938  666500               Hardware        Pending       2025-03-14
+Mohammed Yousef Data Science         BI Engineer          Workflow Automation Phase 3 #458 In Progress  500000       355980  664985           Construction        Pending       2025-05-13
+      Raj Kumar Data Science         ML Engineer                     Smart Building System In Progress  200000       127646  625481               Software        Pending       2024-11-04
+   Marcus Smith Data Science       BI Specialist  Identity Management Upgrade Phase 3 #118 In Progress  500000       522211  623797              Marketing        Pending       2025-03-22
+Saif Al Suwaidi Data Science      Data Scientist        Customer Portal Redesign - Q3 #200 In Progress 2000000      2332005  608806               Software        Pending       2023-07-14
+      Raj Kumar Data Science         ML Engineer                     Smart Building System In Progress  200000       127646  598561               Security        Pending       2023-11-16
+    Mateo Reddy Data Science        BI Developer                       Workflow Automation In Progress  120000       115873  590872               Software        Pending       2022-08-17
+Hassan Al Zaabi Data Science      Data Scientist    Sentiment Analysis Engine Phase 2 #101 In Progress 2000000      2381174  572415               Software        Pending       2024-10-30
+Abdulla Ibrahim Data Science         ML Engineer    Network Security Overhaul Phase 2 #349 In Progress   50000        51937  512303               Hardware        Pending       2023-08-14
+   Hanan Khoury Data Science        BI Developer      Tax Automation Platform Phase 3 #198 In Progress  800000       555991  469437             Consulting        Pending       2025-05-13
+  Yusuf Mansour Data Science         ML Engineer   Legacy System Decommission Phase 3 #314 In Progress  800000       676742  437533               Software        Pending       2024-12-18
+    Mateo Reddy Data Science        BI Developer                       Workflow Automation In Progress  120000       115873  424396               Security        Pending       2024-09-07
+Mohammed Yousef Data Science         BI Engineer          Workflow Automation Phase 3 #458 In Progress  500000       355980  406383 Research & Development        Pending       2023-01-27
+   Marcus Smith Data Science       BI Specialist  Identity Management Upgrade Phase 3 #118 In Progress  500000       522211  396613               Security        Pending       2025-04-13
+  Yusuf Mansour Data Science         ML Engineer Quality Assurance Automation Phase 3 #209 In Progress   50000        30864  252580               Security        Pending       2024-03-10
+    Meera Bhatt Data Science      Data Scientist        Compliance Monitoring Phase 2 #390 In Progress   80000        70174  231554         Cloud Services        Pending       2025-02-20
+Hassan Al Zaabi Data Science      Data Scientist      Cloud Migration Phase 1 Phase 2 #306 In Progress   80000        52831  219821               Software        Pending       2024-07-24
+Hassan Al Zaabi Data Science      Data Scientist      Cloud Migration Phase 1 Phase 2 #306 In Progress   80000        52831  198197               Software        Pending       2024-03-14
+    Roshan Iyer Data Science         BI Engineer                Recommendation System - Q1 In Progress 2000000      1660788  197555               Software        Pending       2024-05-05
+  Yusuf Mansour Data Science         ML Engineer Quality Assurance Automation Phase 3 #209 In Progress   50000        30864  197013             Consulting        Pending       2024-10-25
+  Yusuf Mansour Data Science         ML Engineer Quality Assurance Automation Phase 3 #209 In Progress   50000        30864  195158            Integration        Pending       2025-03-03
+(923 rows)
+
+--- [5] -- --------------------------------------------------------------------------- -- 4a) EXPL
+      full_name   department                role                              project_name      status  budget  actual_cost  amount               category payment_status transaction_date
+    Mateo Reddy Data Science        BI Developer        Regulatory Compliance Tool Phase 3 In Progress  200000       172385  795371               Security        Pending       2025-03-20
+  Yusuf Mansour Data Science         ML Engineer   Legacy System Decommission Phase 3 #314 In Progress  800000       676742  770822               Software        Pending       2024-11-01
+    Roshan Iyer Data Science         BI Engineer                Recommendation System - Q1 In Progress 2000000      1660788  721612                Storage        Pending       2022-10-27
+Hassan Al Zaabi Data Science      Data Scientist    Sentiment Analysis Engine Phase 2 #101 In Progress 2000000      2381174  695609             Consulting        Pending       2024-11-15
+Sami Al Bloushi Data Science Senior Data Analyst              Resource Scheduling Tool #62 In Progress  120000        85938  666500               Hardware        Pending       2025-03-14
+Mohammed Yousef Data Science         BI Engineer          Workflow Automation Phase 3 #458 In Progress  500000       355980  664985           Construction        Pending       2025-05-13
+      Raj Kumar Data Science         ML Engineer                     Smart Building System In Progress  200000       127646  625481               Software        Pending       2024-11-04
+   Marcus Smith Data Science       BI Specialist  Identity Management Upgrade Phase 3 #118 In Progress  500000       522211  623797              Marketing        Pending       2025-03-22
+Saif Al Suwaidi Data Science      Data Scientist        Customer Portal Redesign - Q3 #200 In Progress 2000000      2332005  608806               Software        Pending       2023-07-14
+      Raj Kumar Data Science         ML Engineer                     Smart Building System In Progress  200000       127646  598561               Security        Pending       2023-11-16
+    Mateo Reddy Data Science        BI Developer                       Workflow Automation In Progress  120000       115873  590872               Software        Pending       2022-08-17
+Hassan Al Zaabi Data Science      Data Scientist    Sentiment Analysis Engine Phase 2 #101 In Progress 2000000      2381174  572415               Software        Pending       2024-10-30
+Abdulla Ibrahim Data Science         ML Engineer    Network Security Overhaul Phase 2 #349 In Progress   50000        51937  512303               Hardware        Pending       2023-08-14
+   Hanan Khoury Data Science        BI Developer      Tax Automation Platform Phase 3 #198 In Progress  800000       555991  469437             Consulting        Pending       2025-05-13
+  Yusuf Mansour Data Science         ML Engineer   Legacy System Decommission Phase 3 #314 In Progress  800000       676742  437533               Software        Pending       2024-12-18
+    Mateo Reddy Data Science        BI Developer                       Workflow Automation In Progress  120000       115873  424396               Security        Pending       2024-09-07
+Mohammed Yousef Data Science         BI Engineer          Workflow Automation Phase 3 #458 In Progress  500000       355980  406383 Research & Development        Pending       2023-01-27
+   Marcus Smith Data Science       BI Specialist  Identity Management Upgrade Phase 3 #118 In Progress  500000       522211  396613               Security        Pending       2025-04-13
+  Yusuf Mansour Data Science         ML Engineer Quality Assurance Automation Phase 3 #209 In Progress   50000        30864  252580               Security        Pending       2024-03-10
+    Meera Bhatt Data Science      Data Scientist        Compliance Monitoring Phase 2 #390 In Progress   80000        70174  231554         Cloud Services        Pending       2025-02-20
+Hassan Al Zaabi Data Science      Data Scientist      Cloud Migration Phase 1 Phase 2 #306 In Progress   80000        52831  219821               Software        Pending       2024-07-24
+Hassan Al Zaabi Data Science      Data Scientist      Cloud Migration Phase 1 Phase 2 #306 In Progress   80000        52831  198197               Software        Pending       2024-03-14
+    Roshan Iyer Data Science         BI Engineer                Recommendation System - Q1 In Progress 2000000      1660788  197555               Software        Pending       2024-05-05
+  Yusuf Mansour Data Science         ML Engineer Quality Assurance Automation Phase 3 #209 In Progress   50000        30864  197013             Consulting        Pending       2024-10-25
+  Yusuf Mansour Data Science         ML Engineer Quality Assurance Automation Phase 3 #209 In Progress   50000        30864  195158            Integration        Pending       2025-03-03
+(923 rows)
+
+================ BENCHMARK (DuckDB) ================
+original   median=   8.18 ms  best=   7.10 ms  rows=923
+rewritten  median=   7.83 ms  best=   6.41 ms  rows=923
+
+----- EXPLAIN ANALYZE (original) -----
+???????????????????????????????????????
+???????????????????????????????????????
+??    Query Profiling Information    ??
+???????????????????????????????????????
+???????????????????????????????????????
+EXPLAIN ANALYZE SELECT     e.full_name,     e.department,     e.role,     p.project_name,     p.status,     p.budget,     p.actual_cost,     t.amount,     t.category,     t.payment_status,     t.transaction_date FROM employees e, projects p, transactions t WHERE e.employee_id = p.project_manager_id AND   p.project_id  = t.project_id AND   p.status NOT IN ('Completed', 'On Hold') AND   t.payment_status = 'Pending' AND   t.amount > (         SELECT AVG(amount)         FROM transactions         WHERE payment_status = 'Pending'       ) ORDER BY e.department, t.amount DESC
+??????????????????????????????????????????????????
+??????????????????????????????????????????????????
+??              Total Time: 0.0085s             ??
+??????????????????????????????????????????????????
+??????????????????????????????????????????????????
+?????????????????????????????
+?           QUERY           ?
+?????????????????????????????
+?????????????????????????????
+?      EXPLAIN_ANALYZE      ?
+?    ????????????????????   ?
+?                           ?
+?           0 rows          ?
+?           0.00s           ?
+?????????????????????????????
+?????????????????????????????
+?         PROJECTION        ?
+?    ????????????????????   ?
+?             #0            ?
+?__internal_decompress_strin?
+?           g(#1)           ?
+?             #2            ?
+?             #3            ?
+?__internal_decompress_strin?
+?           g(#4)           ?
+?__internal_decompress_integ?
+?   ral_bigint(#5, 50000)   ?
+?__internal_decompress_integ?
+?   ral_bigint(#6, 16791)   ?
+?__internal_decompress_integ?
+?    ral_bigint(#7, 1000)   ?
+?             #8            ?
+?__internal_decompress_strin?
+?           g(#9)           ?
+?            #10            ?
+?                           ?
+?                           ?
+?                           ?
+?          923 rows         ?
+?           0.00s           ?
+?????????????????????????????
+?????????????????????????????
+?          ORDER_BY         ?
+?    ????????????????????   ?
+?      e.department ASC     ?
+?       t.amount DESC       ?
+?                           ?
+?                           ?
+?                           ?
+?          923 rows         ?
+?           0.00s           ?
+?????????????????????????????
+?????????????????????????????
+?         PROJECTION        ?
+?    ????????????????????   ?
+?             #0            ?
+?__internal_compress_string_?
+?        uhugeint(#1)       ?
+?             #2            ?
+?             #3            ?
+?__internal_compress_string_?
+?        uhugeint(#4)       ?
+?__internal_compress_integra?
+?   l_uinteger(#5, 50000)   ?
+?__internal_compress_integra?
+?   l_uinteger(#6, 16791)   ?
+?__internal_compress_integra?
+?    l_uinteger(#7, 1000)   ?
+?             #8            ?
+?__internal_compress_string_?
+?        uhugeint(#9)       ?
+?            #10            ?
+?                           ?
+?                           ?
+?                           ?
+?          923 rows         ?
+?           0.00s           ?
+?????????????????????????????
+?????????????????????????????
+?         PROJECTION        ?
+?    ????????????????????   ?
+?         full_name         ?
+?         department        ?
+?            role           ?
+?        project_name       ?
+?           status          ?
+?           budget          ?
+?        actual_cost        ?
+?           amount          ?
+?          category         ?
+?       payment_status      ?
+?      transaction_date     ?
+?                           ?
+?                           ?
+?                           ?
+?          923 rows         ?
+?           0.00s           ?
+?????????????????????????????
+?????????????????????????????
+?         HASH_JOIN         ?
+?    ????????????????????   ?
+?      Join Type: INNER     ?
+?                           ?
+?        Conditions:        ?
+?       employee_id =       ?
+?     project_manager_id    ????????????????
+?                           ?              ?
+?                           ?              ?
+?                           ?              ?
+?          923 rows         ?              ?
+?           0.00s           ?              ?
+?????????????????????????????              ?
+??????????????????????????????????????????????????????????
+?         TABLE_SCAN        ??         HASH_JOIN         ?
+?    ????????????????????   ??    ????????????????????   ?
+?           Table:          ??      Join Type: INNER     ?
+?  presight_warehouse.main  ??                           ?
+?         .employees        ??        Conditions:        ?
+?                           ??  project_id = project_id  ?
+?   Type: Sequential Scan   ??                           ?
+?                           ??                           ?
+?        Projections:       ??                           ?
+?        employee_id        ??                           ?
+?         full_name         ??           0.00s           ?
+?         department        ??                           ?
+?            role           ??                           ????????????????
+?                           ??                           ?              ?
+?      Dynamic Filters:     ??                           ?              ?
+?  optional: employee_id>=  ??                           ?              ?
+?  'EMP0002' AND optional:  ??                           ?              ?
+?   employee_id<='EMP0991'  ??                           ?              ?
+?  AND optional: employee_id??                           ?              ?
+?  IN BF(project_manager_id)??                           ?              ?
+?                           ??                           ?              ?
+?                           ??                           ?              ?
+?                           ??                           ?              ?
+?          147 rows         ??          923 rows         ?              ?
+?           0.00s           ??          (0.00s)          ?              ?
+??????????????????????????????????????????????????????????              ?
+                             ??????????????????????????????????????????????????????????
+                             ?         TABLE_SCAN        ??      NESTED_LOOP_JOIN     ?
+                             ?    ????????????????????   ??    ????????????????????   ?
+                             ?           Table:          ??      Join Type: INNER     ?
+                             ?  presight_warehouse.main  ??                           ?
+                             ?         .projects         ??        Conditions:        ?
+                             ?                           ??  CAST(amount AS DOUBLE) > ?
+                             ?   Type: Sequential Scan   ??          SUBQUERY         ?
+                             ?                           ??                           ?
+                             ?        Projections:       ??                           ?
+                             ?     project_manager_id    ??                           ?
+                             ?         project_id        ??                           ?
+                             ?           status          ??           0.00s           ?
+                             ?        project_name       ??                           ?
+                             ?           budget          ??                           ?
+                             ?        actual_cost        ??                           ????????????????
+                             ?                           ??                           ?              ?
+                             ?          Filters:         ??                           ?              ?
+                             ? (status NOT IN ('Completed??                           ?              ?
+                             ?       ', 'On Hold'))      ??                           ?              ?
+                             ?                           ??                           ?              ?
+                             ?      Dynamic Filters:     ??                           ?              ?
+                             ?   optional: project_id>=  ??                           ?              ?
+                             ?  'PRJ0001' AND optional:  ??                           ?              ?
+                             ?    project_id<='PRJ0500'  ??                           ?              ?
+                             ?                           ??                           ?              ?
+                             ?                           ??                           ?              ?
+                             ?                           ??                           ?              ?
+                             ?          239 rows         ??         2,127 rows        ?              ?
+                             ?           0.00s           ??          (0.00s)          ?              ?
+                             ??????????????????????????????????????????????????????????              ?
+                                                          ??????????????????????????????????????????????????????????
+                                                          ?         TABLE_SCAN        ??         PROJECTION        ?
+                                                          ?    ????????????????????   ??    ????????????????????   ?
+                                                          ?           Table:          ?? CASE  WHEN ((#1 > 1)) THEN?
+                                                          ?  presight_warehouse.main  ??   ("error"('More than one ?
+                                                          ?       .transactions       ??      row returned by a    ?
+                                                          ?                           ??     subquery used as an   ?
+                                                          ?   Type: Sequential Scan   ??     expression - scalar   ?
+                                                          ?                           ??     subqueries can only   ?
+                                                          ?        Projections:       ??    return a single row.   ?
+                                                          ?         project_id        ??          Use "SET         ?
+                                                          ?       payment_status      ?? scalar_subquery_error_on_m?
+                                                          ?           amount          ??   ultiple_rows=false" to  ?
+                                                          ?          category         ??     revert to previous    ?
+                                                          ?      transaction_date     ??   behavior of returning a ?
+                                                          ?                           ?? random row.')) ELSE #0 END?
+                                                          ?          Filters:         ??                           ?
+                                                          ?  payment_status='Pending' ??                           ?
+                                                          ?                           ??                           ?
+                                                          ?                           ??                           ?
+                                                          ?                           ??           0.00s           ?
+                                                          ?         8,927 rows        ??           1 row           ?
+                                                          ?           0.00s           ??          (0.00s)          ?
+                                                          ??????????????????????????????????????????????????????????
+                                                                                       ?????????????????????????????
+                                                                                       ?    UNGROUPED_AGGREGATE    ?
+                                                                                       ?    ????????????????????   ?
+                                                                                       ?        Aggregates:        ?
+                                                                                       ?        "first"(#0)        ?
+                                                                                       ?        count_star()       ?
+                                                                                       ?                           ?
+                                                                                       ?                           ?
+                                                                                       ?                           ?
+                                                                                       ?           1 row           ?
+                                                                                       ?           0.00s           ?
+                                                                                       ?????????????????????????????
+                                                                                       ?????????????????????????????
+                                                                                       ?         PROJECTION        ?
+                                                                                       ?    ????????????????????   ?
+                                                                                       ?             #0            ?
+                                                                                       ?                           ?
+                                                                                       ?                           ?
+                                                                                       ?                           ?
+                                                                                       ?           1 row           ?
+                                                                                       ?           0.00s           ?
+                                                                                       ?????????????????????????????
+                                                                                       ?????????????????????????????
+                                                                                       ?    UNGROUPED_AGGREGATE    ?
+                                                                                       ?    ????????????????????   ?
+                                                                                       ?    Aggregates: avg(#0)    ?
+                                                                                       ?                           ?
+                                                                                       ?                           ?
+                                                                                       ?                           ?
+                                                                                       ?           1 row           ?
+                                                                                       ?           0.00s           ?
+                                                                                       ?????????????????????????????
+                                                                                       ?????????????????????????????
+                                                                                       ?         PROJECTION        ?
+                                                                                       ?    ????????????????????   ?
+                                                                                       ?           amount          ?
+                                                                                       ?                           ?
+                                                                                       ?                           ?
+                                                                                       ?                           ?
+                                                                                       ?         8,927 rows        ?
+                                                                                       ?           0.00s           ?
+                                                                                       ?????????????????????????????
+                                                                                       ?????????????????????????????
+                                                                                       ?         TABLE_SCAN        ?
+                                                                                       ?    ????????????????????   ?
+                                                                                       ?           Table:          ?
+                                                                                       ?  presight_warehouse.main  ?
+                                                                                       ?       .transactions       ?
+                                                                                       ?                           ?
+                                                                                       ?   Type: Sequential Scan   ?
+                                                                                       ?    Projections: amount    ?
+                                                                                       ?                           ?
+                                                                                       ?          Filters:         ?
+                                                                                       ?  payment_status='Pending' ?
+                                                                                       ?                           ?
+                                                                                       ?                           ?
+                                                                                       ?                           ?
+                                                                                       ?         8,927 rows        ?
+                                                                                       ?           0.00s           ?
+                                                                                       ?????????????????????????????
+
+
+----- EXPLAIN ANALYZE (rewritten) -----
+???????????????????????????????????????
+???????????????????????????????????????
+??    Query Profiling Information    ??
+???????????????????????????????????????
+???????????????????????????????????????
+EXPLAIN ANALYZE WITH avg_pending AS (                                -- (1) scalar subquery -> CTE, computed once,     SELECT AVG(amount) AS avg_amount                 --     from a narrow index-only scan     FROM transactions     WHERE payment_status = 'Pending' ), active_projects AS (                                 -- (2) filter projects BEFORE joining     SELECT project_id, project_name, status, budget, actual_cost, project_manager_id     FROM projects     WHERE status NOT IN ('Completed', 'On Hold') ) SELECT e.full_name, e.department, e.role,            -- (3) explicit column list, no SELECT *        p.project_name, p.status, p.budget, p.actual_cost,        t.amount, t.category, t.payment_status, t.transaction_date FROM transactions t JOIN active_projects p ON p.project_id  = t.project_id        -- (4) explicit JOIN ... ON JOIN employees       e ON e.employee_id = p.project_manager_id CROSS JOIN avg_pending a WHERE t.payment_status = 'Pending'                   -- (5) predicates applied on the big table   AND t.amount > a.avg_amount ORDER BY e.department, t.amount DESC
+??????????????????????????????????????????????????
+??????????????????????????????????????????????????
+??              Total Time: 0.0081s             ??
+??????????????????????????????????????????????????
+??????????????????????????????????????????????????
+?????????????????????????????
+?           QUERY           ?
+?????????????????????????????
+?????????????????????????????
+?      EXPLAIN_ANALYZE      ?
+?    ????????????????????   ?
+?                           ?
+?           0 rows          ?
+?           0.00s           ?
+?????????????????????????????
+?????????????????????????????
+?         PROJECTION        ?
+?    ????????????????????   ?
+?             #0            ?
+?__internal_decompress_strin?
+?           g(#1)           ?
+?             #2            ?
+?             #3            ?
+?__internal_decompress_strin?
+?           g(#4)           ?
+?__internal_decompress_integ?
+?   ral_bigint(#5, 50000)   ?
+?__internal_decompress_integ?
+?   ral_bigint(#6, 16791)   ?
+?__internal_decompress_integ?
+?    ral_bigint(#7, 1000)   ?
+?             #8            ?
+?__internal_decompress_strin?
+?           g(#9)           ?
+?            #10            ?
+?                           ?
+?                           ?
+?                           ?
+?          923 rows         ?
+?           0.00s           ?
+?????????????????????????????
+?????????????????????????????
+?          ORDER_BY         ?
+?    ????????????????????   ?
+?      e.department ASC     ?
+?       t.amount DESC       ?
+?                           ?
+?                           ?
+?                           ?
+?          923 rows         ?
+?           0.00s           ?
+?????????????????????????????
+?????????????????????????????
+?         PROJECTION        ?
+?    ????????????????????   ?
+?             #0            ?
+?__internal_compress_string_?
+?        uhugeint(#1)       ?
+?             #2            ?
+?             #3            ?
+?__internal_compress_string_?
+?        uhugeint(#4)       ?
+?__internal_compress_integra?
+?   l_uinteger(#5, 50000)   ?
+?__internal_compress_integra?
+?   l_uinteger(#6, 16791)   ?
+?__internal_compress_integra?
+?    l_uinteger(#7, 1000)   ?
+?             #8            ?
+?__internal_compress_string_?
+?        uhugeint(#9)       ?
+?            #10            ?
+?                           ?
+?                           ?
+?                           ?
+?          923 rows         ?
+?           0.00s           ?
+?????????????????????????????
+?????????????????????????????
+?         PROJECTION        ?
+?    ????????????????????   ?
+?         full_name         ?
+?         department        ?
+?            role           ?
+?        project_name       ?
+?           status          ?
+?           budget          ?
+?        actual_cost        ?
+?           amount          ?
+?          category         ?
+?       payment_status      ?
+?      transaction_date     ?
+?                           ?
+?                           ?
+?                           ?
+?          923 rows         ?
+?           0.00s           ?
+?????????????????????????????
+?????????????????????????????
+?         HASH_JOIN         ?
+?    ????????????????????   ?
+?      Join Type: INNER     ?
+?                           ?
+?        Conditions:        ?
+?       employee_id =       ?
+?     project_manager_id    ????????????????
+?                           ?              ?
+?                           ?              ?
+?                           ?              ?
+?          923 rows         ?              ?
+?           0.00s           ?              ?
+?????????????????????????????              ?
+??????????????????????????????????????????????????????????
+?         TABLE_SCAN        ??         HASH_JOIN         ?
+?    ????????????????????   ??    ????????????????????   ?
+?           Table:          ??      Join Type: INNER     ?
+?  presight_warehouse.main  ??                           ?
+?         .employees        ??        Conditions:        ?
+?                           ??  project_id = project_id  ?
+?   Type: Sequential Scan   ??                           ?
+?                           ??                           ?
+?        Projections:       ??                           ?
+?        employee_id        ??                           ?
+?         full_name         ??           0.00s           ?
+?         department        ??                           ?
+?            role           ??                           ????????????????
+?                           ??                           ?              ?
+?      Dynamic Filters:     ??                           ?              ?
+?  optional: employee_id>=  ??                           ?              ?
+?  'EMP0002' AND optional:  ??                           ?              ?
+?   employee_id<='EMP0991'  ??                           ?              ?
+?  AND optional: employee_id??                           ?              ?
+?  IN BF(project_manager_id)??                           ?              ?
+?                           ??                           ?              ?
+?                           ??                           ?              ?
+?                           ??                           ?              ?
+?          147 rows         ??          923 rows         ?              ?
+?           0.00s           ??          (0.00s)          ?              ?
+??????????????????????????????????????????????????????????              ?
+                             ??????????????????????????????????????????????????????????
+                             ?         PROJECTION        ??      NESTED_LOOP_JOIN     ?
+                             ?    ????????????????????   ??    ????????????????????   ?
+                             ?         project_id        ??      Join Type: INNER     ?
+                             ?        project_name       ??                           ?
+                             ?           status          ??        Conditions:        ?
+                             ?           budget          ??  CAST(amount AS DOUBLE) > ?
+                             ?        actual_cost        ??         avg_amount        ????????????????
+                             ?     project_manager_id    ??                           ?              ?
+                             ?                           ??                           ?              ?
+                             ?                           ??                           ?              ?
+                             ?                           ??                           ?              ?
+                             ?          239 rows         ??           0.00s           ?              ?
+                             ?           0.00s           ??          (0.00s)          ?              ?
+                             ??????????????????????????????????????????????????????????              ?
+                             ???????????????????????????????????????????????????????????????????????????????????????
+                             ?         TABLE_SCAN        ??         TABLE_SCAN        ??    UNGROUPED_AGGREGATE    ?
+                             ?    ????????????????????   ??    ????????????????????   ??    ????????????????????   ?
+                             ?           Table:          ??           Table:          ??    Aggregates: avg(#0)    ?
+                             ?  presight_warehouse.main  ??  presight_warehouse.main  ??                           ?
+                             ?         .projects         ??       .transactions       ??                           ?
+                             ?                           ??                           ??                           ?
+                             ?   Type: Sequential Scan   ??   Type: Sequential Scan   ??                           ?
+                             ?                           ??                           ??           0.00s           ?
+                             ?        Projections:       ??        Projections:       ??                           ?
+                             ?           status          ??         project_id        ??                           ?
+                             ?         project_id        ??       payment_status      ??                           ?
+                             ?        project_name       ??           amount          ??                           ?
+                             ?           budget          ??          category         ??                           ?
+                             ?        actual_cost        ??      transaction_date     ??                           ?
+                             ?     project_manager_id    ??                           ??                           ?
+                             ?                           ??          Filters:         ??                           ?
+                             ?          Filters:         ??  payment_status='Pending' ??                           ?
+                             ? (status NOT IN ('Completed??                           ??                           ?
+                             ?       ', 'On Hold'))      ??                           ??                           ?
+                             ?                           ??                           ??                           ?
+                             ?      Dynamic Filters:     ??                           ??                           ?
+                             ?   optional: project_id>=  ??           0.00s           ??                           ?
+                             ?  'PRJ0001' AND optional:  ??                           ??                           ?
+                             ?    project_id<='PRJ0500'  ??                           ??                           ?
+                             ?                           ??                           ??                           ?
+                             ?                           ??                           ??                           ?
+                             ?                           ??                           ??                           ?
+                             ?          239 rows         ??         8,927 rows        ??           1 row           ?
+                             ?           0.00s           ??          (0.00s)          ??          (0.00s)          ?
+                             ???????????????????????????????????????????????????????????????????????????????????????
+                                                                                       ?????????????????????????????
+                                                                                       ?         PROJECTION        ?
+                                                                                       ?    ????????????????????   ?
+                                                                                       ?           amount          ?
+                                                                                       ?                           ?
+                                                                                       ?                           ?
+                                                                                       ?                           ?
+                                                                                       ?         8,927 rows        ?
+                                                                                       ?           0.00s           ?
+                                                                                       ?????????????????????????????
+                                                                                       ?????????????????????????????
+                                                                                       ?         TABLE_SCAN        ?
+                                                                                       ?    ????????????????????   ?
+                                                                                       ?           Table:          ?
+                                                                                       ?  presight_warehouse.main  ?
+                                                                                       ?       .transactions       ?
+                                                                                       ?                           ?
+                                                                                       ?   Type: Sequential Scan   ?
+                                                                                       ?    Projections: amount    ?
+                                                                                       ?                           ?
+                                                                                       ?          Filters:         ?
+                                                                                       ?  payment_status='Pending' ?
+                                                                                       ?                           ?
+                                                                                       ?                           ?
+                                                                                       ?                           ?
+                                                                                       ?         8,927 rows        ?
+                                                                                       ?           0.00s           ?
+                                                                                       ?????????????????????????????
+
