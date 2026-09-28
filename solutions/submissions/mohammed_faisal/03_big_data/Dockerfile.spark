@@ -1,0 +1,15 @@
+# Runs the Spark job (Task 3.1) without installing Java/Hadoop on the host (especially Windows).
+# Build from the repo root:
+#   docker build -f solutions/submissions/mohammed_faisal/03_big_data/Dockerfile.spark -t presight-spark .
+#   docker run --rm -v "$(pwd)/datasets:/app/datasets" \
+#       -v "$(pwd)/outputs/results/mohammed_faisal/03_big_data:/app/out" presight-spark
+# Tip: on Windows bind mounts, writing 365 date partitions is slow (~90 s); on container-local disk
+# the whole job takes ~20 s (set SPARK_OUTPUT_DIR=/tmp/out to compare).
+FROM python:3.11-slim
+RUN apt-get update && apt-get install -y --no-install-recommends default-jre-headless procps \
+    && rm -rf /var/lib/apt/lists/*
+ENV PYTHONUNBUFFERED=1 EVENTS_DIR=/app/datasets/events_stream SPARK_OUTPUT_DIR=/app/out/spark
+RUN pip install --no-cache-dir pyspark==3.5.3
+WORKDIR /app
+COPY solutions/submissions/mohammed_faisal/03_big_data/spark_pipeline.py ./spark_pipeline.py
+ENTRYPOINT ["python", "spark_pipeline.py"]

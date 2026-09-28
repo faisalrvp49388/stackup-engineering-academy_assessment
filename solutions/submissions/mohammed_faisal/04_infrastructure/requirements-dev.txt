@@ -1,0 +1,38 @@
+# StackUp Engineering Academy — full local development environment (Spark, Kafka, Airflow, tests).
+# The ETL container only needs requirements.txt.
+
+# Data processing
+pandas>=2.0.0
+numpy>=1.24.0
+
+# Big data
+pyspark>=3.5.0         # Task 3.1 (needs Java 11/17)
+
+# Streaming
+kafka-python>=2.0.2
+
+# Orchestration
+apache-airflow>=2.7.0
+
+# Storage formats
+pyarrow>=12.0.0       # Parquet read/write
+
+# Database connectivity
+duckdb>=0.9.0         # Recommended local SQL engine for Task 2.1
+sqlalchemy>=2.0.0
+
+# Data quality (optional — you may also implement checks manually)
+great-expectations>=0.17.0
+
+# Utilities
+python-dotenv>=1.0.0  # For environment variable management
+pyyaml>=6.0           # For config files
+click>=8.1.0          # For CLI arguments
+
+# Testing
+pytest>=7.4.0
+pytest-cov>=4.1.0
+
+# Linting (encouraged)
+flake8>=6.0.0
+black>=23.0.0

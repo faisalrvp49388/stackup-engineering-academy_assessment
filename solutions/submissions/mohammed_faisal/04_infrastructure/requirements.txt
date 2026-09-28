@@ -1,0 +1,5 @@
+# ETL pipeline runtime dependencies (used by the Dockerfile).
+# Full development stack (Spark, Kafka, Airflow, tests): requirements-dev.txt
+pandas>=2.0.0
+numpy>=1.24.0
+pyyaml>=6.0
